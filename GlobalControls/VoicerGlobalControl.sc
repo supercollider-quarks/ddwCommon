@@ -506,7 +506,7 @@ VoicerGCView {
 			nameView = GUI.staticText.new(voicerGUI.controlView, Rect(0, 0, 100, 20));
 			editorGUI = editor.gui(voicerGUI.controlView, Rect(0, 0, 150, 20));
 			editor.addDependant(model);
-			voicerGUI.controlView.decorator.nextLine;  // insure correct formatting for next
+			voicerGUI.controlView.startRow; //.decorator.nextLine;  // insure correct formatting for next
 
 			this.displayNameSet;		// displays with midi routing if any
 			doRefresh.if({ voicerGUI.sizeWindow; });  // make sure it shows
