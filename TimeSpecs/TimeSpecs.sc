@@ -61,16 +61,24 @@ DelayTimeSpecLeadTime : DelayTimeSpec {
 
 // schedule for a specific beat number
 AbsoluteTimeSpec : NilTimeSpec {
-	var	<>quant, <>clock;
+	var	<quant, <>clock;
+	var qstream;
 	*new { arg quant; ^super.prNew.quant_(quant ? 1).clock_(TempoClock.default) }
 	applyLatency { ^this }
+	quant_ { |q|
+		qstream = q.asPattern.asStream;
+		quant = q;
+	}
 	nextTimeOnGrid { |argClock|
-		(quant >= (argClock ? clock).beats).if({
-			^quant
+		var	schedclock = argClock ? clock ? TempoClock.default,
+		q = qstream.next(schedclock) ? 0;
+		(q >= schedclock.beats).if({
+			^q
 		}, {
 				// invalid after given time has passed
-			MethodError("AbsoluteTimeSpec(%) has expired at % beats."
-				.format(quant, (argClock ? clock).beats), this).throw;
+				// MethodError("AbsoluteTimeSpec(%) has expired at % beats."
+				// .format(q, schedclock.beats), this).throw;
+				nil
 		});
 	}
 	storeArgs { ^[quant] }
